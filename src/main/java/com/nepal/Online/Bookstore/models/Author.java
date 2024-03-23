@@ -8,18 +8,18 @@ import java.util.Date;
 public class Author {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private int authorid;
+    private Integer authorid;
 
     private String name;
 
     private Date createdAt;
     private String authorImageFileName;
 
-    public int getAuthorid() {
+    public Integer getAuthorid() {
         return authorid;
     }
 
-    public void setAuthorid(int authorid) {
+    public void setAuthorid(Integer authorid) {
         this.authorid = authorid;
     }
 

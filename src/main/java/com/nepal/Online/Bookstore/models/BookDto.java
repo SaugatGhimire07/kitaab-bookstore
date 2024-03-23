@@ -1,7 +1,10 @@
 package com.nepal.Online.Bookstore.models;
 
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -9,11 +12,12 @@ public class BookDto {
     @NotEmpty (message = "The book title is required")
     private String title;
 
-    @NotEmpty (message = "The author name is required")
-    private Author author;
+    @NotNull(message = "The author is required")
+    private Integer authorId;
 
     @NotEmpty (message = "The genre is required")
     private String genre;
+
     @Min(0)
     private double price;
 
@@ -30,12 +34,12 @@ public class BookDto {
         this.title = title;
     }
 
-    public Author getAuthor() {
-        return author;
+    public Integer getAuthorId() {
+        return authorId;
     }
 
-    public void setAuthor(Author author) {
-        this.author = author;
+    public void setAuthorId(Integer authorId) {
+        this.authorId = authorId;
     }
 
     public String getGenre() {
