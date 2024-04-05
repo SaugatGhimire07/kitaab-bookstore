@@ -38,7 +38,7 @@ public class BooksController {
     public String showBookList(Model model) {
         List<Book> books = repo.findAll();
         model.addAttribute("books", books);
-        return "books/index";
+        return "books/book";
     }
     @GetMapping("/add")
     public String showCreatePage(Model model) {
