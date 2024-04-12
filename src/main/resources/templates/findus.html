@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kitabkhana</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+
+    <link rel="stylesheet" type="text/css" href="nav.css">
+    <link rel="stylesheet" type="text/css" href="footer.css">
+
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Inter";
+        }
+
+        #page-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            font-family: "Inria Serif";
+            border-bottom: 1px solid black;
+            padding: 10px;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+
+        #findus {
+            width: 80%;
+            margin-top: 20px;
+            margin: auto;
+        }
+
+        #location-select {
+            font-size: 16px;
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            color: #333;
+            cursor: pointer;
+        }
+
+        #location-select:focus {
+            outline: none;
+        }
+
+        #map-container {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        #map-container iframe {
+            width: 100%;
+            height: 450px;
+            border: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div th:replace="components/nav :: div"></div>
+<main>
+    <p id="page-title">Our Locations</p>
+    <div id="findus">
+        <label for="location-select">Select Location:</label>
+        <select id="location-select">
+            <option value="book-wardrobe" selected>The Book Wardrobe</option>
+            <option value="guardian-books">Guardianbooks</option>
+        </select>
+        <div id="map-container">
+            <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d11559.92798029925!2d-79.72876960259518!3d43.58609136079395!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x882b41b95dd52f07%3A0xc657b7e793385c75!2sThe%20Book%20Wardrobe!5e0!3m2!1sen!2sca!4v1712877012562!5m2!1sen!2sca"
+                    width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+    </div>
+</main>
+    <div th:replace="components/footer :: footer"></div>
+
+
+
+<script>
+    feather.replace();
+    $(document).ready(function () {
+        $('#location-select').change(function () {
+            var selectedLocation = $(this).val();
+            var mapContainer = $('#map-container');
+
+            mapContainer.empty(); // Clear previous iframe
+
+            if (selectedLocation === 'book-wardrobe') {
+                mapContainer.html('<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d11559.92798029925!2d-79.72876960259518!3d43.58609136079395!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x882b41b95dd52f07%3A0xc657b7e793385c75!2sThe%20Book%20Wardrobe!5e0!3m2!1sen!2sca!4v1712877012562!5m2!1sen!2sca" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>');
+            } else if (selectedLocation === 'guardian-books') {
+                mapContainer.html('<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d11559.92798029925!2d-79.72876960259518!3d43.58609136079395!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x882b416aed2c75a9%3A0xa197a4d67a84ee7d!2sGuadianbooks!5e0!3m2!1sen!2sca!4v1712877256013!5m2!1sen!2sca" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>');
+            }
+        });
+    });
+
+
+</script>
+</body>
+
+
+
+
+</html>

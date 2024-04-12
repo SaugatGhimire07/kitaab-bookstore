@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kitabkhana</title>
+    <script src="https://unpkg.com/feather-icons"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Inter";
+        }
+
+        a {
+            text-decoration: none;
+            color: #000000;
+        }
+
+        #offer-bar {
+            background-color: black;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+            font-family: Inter;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 16.94px;
+        }
+
+        nav {
+            width: 80%;
+            margin: auto;
+        }
+
+        #first-nav {
+            display: flex;
+            flex-direction: row;
+            font-weight: bold;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #logo {
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+
+        #nav-search {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            width: 65%;
+            background-color: #F4F5F5;
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        #nav-search p {
+            margin-left: 10px;
+            font-size: 0.9em;
+            font-weight: regular;
+            color: #7E7E7E;
+        }
+
+        #nav-bar-icons {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            width: 20%;
+        }
+
+        #second-nav {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        #second-nav ul {
+            display: flex;
+            flex-direction: row;
+            list-style: none;
+        }
+
+        #second-nav ul li {
+            margin-right: 20px;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        #second-nav ul li a {
+            text-decoration: none;
+            color: #000000;
+        }
+
+        .books-display {
+            width: 80%;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .books-display .display-header {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .display-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            font-family: "Inria Serif";
+        }
+
+        .display-subtitle {
+            font-family: "Inria Serif";
+        }
+
+        .buttons {
+            text-decoration: none;
+        }
+
+        .optional-button {
+            font-size: 0.7em;
+            font-weight: 300;
+            color: black;
+        }
+
+        .book-link {
+            text-decoration: none;
+            /* Remove underline decoration */
+        }
+
+        .display-books {
+            display: flex;
+            flex-wrap: wrap;
+            margin-right: -10px;
+            /* Negative margin to offset margin added on the last element */
+        }
+
+        .display-book {
+            margin-top: 40px;
+            flex: 0 0 calc(25% - 10px);
+            max-width: calc(25% - 10px);
+            padding: 0 5px;
+            margin-right: 10px;
+            /* Margin between each book */
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Remove margin from the last element */
+        .display-book:last-child {
+            margin-right: 0;
+        }
+
+        .display-book:nth-child(1) {
+            padding-left: 0;
+        }
+
+        .display-book:nth-last-child() {
+            padding-right: 0;
+        }
+
+        .display-book img {
+            max-width: 100%;
+            max-height: 100%;
+            width: 100%;
+            height: 378px;
+            object-fit: cover;
+        }
+
+        .display-book .book-title {
+            font-family: Inria Serif;
+            font-size: 18px;
+            font-style: italic;
+            font-weight: 700;
+            line-height: 21.58px;
+            letter-spacing: 0.05em;
+            padding-top: 5px;
+        }
+
+        .display-book .book-author {
+            font-family: "Inria Serif";
+            font-size: 18px;
+            font-style: italic;
+            font-weight: 400;
+            line-height: 21.58px;
+            letter-spacing: 0.05em;
+            padding-top: 5px;
+        }
+
+        .display-book .book-price {
+            font-family: "Inter";
+            font-size: 14px;
+            font-weight: 700;
+            line-height: 16.94px;
+            letter-spacing: 0.05em;
+            text-align: left;
+            padding-top: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div th:replace="components/nav :: div"></div>
+
+    <main>
+        <div class="books-display">
+            <div class="display-header">
+                <p class="display-title">Books in <span th:text="${genre}" class="display-subtitle"></span></p>
+            </div>
+            <div class="display-books">
+                <div class="display-book" th:each="book : ${books}">
+                    <a th:href="@{/bookdetails(id=${book.bookid})}" class="book-link">
+                        <img th:src="@{'/images/' + ${book.imageFileName}}" alt="..." />
+                    </a>
+                    <a th:href="@{/bookdetails(id=${book.bookid})}" class="book-link">
+                        <p class="book-title" th:text="${book.title}"></p>
+                    </a>
+                    <p class="book-author">by <span th:text="${book.author.name}"></span></p>
+                    <p class="book-price">- $ <span th:text="${book.price}"></span></p>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer>
+
+    </footer>
+
+    <script>
+        feather.replace();
+    </script>
+</body>
+
+
+
+
+</html>

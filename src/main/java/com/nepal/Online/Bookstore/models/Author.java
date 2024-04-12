@@ -12,6 +12,9 @@ public class Author {
 
     private String name;
 
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
     private Date createdAt;
     private String authorImageFileName;
 
@@ -29,6 +32,14 @@ public class Author {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Date getCreatedAt() {

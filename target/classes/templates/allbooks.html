@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kitabkhana</title>
+    <script src="https://unpkg.com/feather-icons"></script>
+
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" type="text/css" href="nav.css">
+    <link rel="stylesheet" type="text/css" href="footer.css">
+</head>
+
+<body>
+    <div th:replace="components/nav :: div"></div>
+
+    <main>
+        <div class="books-display">
+            <div class="display-header">
+                <p class="display-title">All Books</p>
+            </div>
+            <div class="display-books">
+                <div class="display-book" th:each="book, iterStat : ${books}">
+                    <a th:href="@{/bookdetails(id=${book.bookid})}" class="book-link">
+                        <img th:src="@{'/images/' + ${book.imageFileName}}" alt="..." />
+                    </a>
+                    <a th:href="@{/bookdetails(id=${book.bookid})}" class="book-link">
+                        <p class="book-title" th:text="${book.title}"></p>
+                    </a>
+                    <p class="book-author">by <span th:text="${book.author.name}"></span></p>
+                    <p class="book-price">- $ <span th:text="${book.price}"></span></p>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <div th:replace="components/footer :: footer"></div>
+
+    <script>
+        feather.replace();
+    </script>
+</body>
+
+
+
+
+</html>

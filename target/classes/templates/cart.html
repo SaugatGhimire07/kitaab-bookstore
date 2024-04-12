@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kitabkhana</title>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="cart.css">
+    <link rel="stylesheet" type="text/css" href="nav.css">
+    <link rel="stylesheet" type="text/css" href="footer.css">
+</head>
+
+<body>
+<div th:replace="components/nav :: div"></div>
+
+    <main>
+        <div class="body-container">
+            <p id="page-title">Your Cart</p>
+            <table>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                </tr>
+            </table>
+
+            <div class="buttons">
+                <button class="continue-button">Continue Shopping</button>
+                <button class="proceed-button">Proceed to Checkout</button>
+            </div>
+        </div>
+
+
+    </main>
+
+    <div th:replace="components/footer :: footer"></div>
+
+    <script>
+        // Initialize Feather Icons after the document is loaded
+        document.addEventListener("DOMContentLoaded", function () {
+            feather.replace();
+        });
+
+        $(document).ready(function () {
+            // Retrieve cart items from local storage
+            var cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+
+            // Display cart items
+            cartItems.forEach(function (item, index) {
+                var row = '<tr>' +
+                    '<td><img src="' + item.image + '" alt=""></td>' +
+                    '<td>' +
+                    '<div class="table-details">' +
+                    '<p>' + item.title + ' Hardcover<br>by ' + item.author + '</p>' +
+                    '<div class="remove-button">' +
+                    '<button onclick="removeItem(' + index + ')">' + // Pass index to removeItem function
+                    '<i data-feather="trash-2" class="remove-icon"></i> <span class="remove-text">Remove</span>' +
+                    '</button>' +
+                    '</div>' +
+                    '</div>' +
+                    '</td>' +
+                    '<td>' +
+                    '<select class="nums">' +
+                    '<option value="1" ' + (item.quantity === 1 ? 'selected' : '') + '>1</option>' +
+                    '<option value="2" ' + (item.quantity === 2 ? 'selected' : '') + '>2</option>' +
+                    '<option value="3" ' + (item.quantity === 3 ? 'selected' : '') + '>3</option>' +
+                    '</select>' +
+                    '</td>' +
+                    '<td class="table-row-total">' + (item.quantity * item.price).toFixed(2) + '</td>' +
+                    '</tr>';
+
+                $('table tbody').append(row);
+            });
+        });
+
+        function removeItem(index) {
+            // Retrieve cart items from local storage
+            var cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+
+            // Remove item from cart using the index
+            cartItems.splice(index, 1);
+
+            // Update local storage with modified cart items
+            localStorage.setItem('cart', JSON.stringify(cartItems));
+
+            // Reload the page
+            location.reload();
+        }
+    </script>
+
+
+
+
+</body>
+
+</html>

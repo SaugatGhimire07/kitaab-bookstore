@@ -1,0 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Inter";
+}
+
+a {
+    text-decoration: none;
+    color: #000000;
+}
+
+#offer-bar {
+    background-color: black;
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+    font-family: Inter;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 16.94px;
+}
+
+nav {
+    width: 80%;
+    margin: auto;
+}
+
+#first-nav {
+    display: flex;
+    flex-direction: row;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#logo {
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+#nav-search {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 65%;
+    background-color: #F4F5F5;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+#nav-search p {
+    margin-left: 10px;
+    font-size: 0.9em;
+    font-weight: regular;
+    color: #7E7E7E;
+}
+
+#nav-bar-icons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 20%;
+}
+
+#second-nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#second-nav ul {
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+}
+
+#second-nav ul li {
+    margin-right: 20px;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+#second-nav ul li a {
+    text-decoration: none;
+    color: #000000;
+}

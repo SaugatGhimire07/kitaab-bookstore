@@ -25,6 +25,7 @@ public class Book {
 
     private Date createdAt;
     private String imageFileName;
+    private int quantity;
 
     public int getBookid() {
         return bookid;
@@ -56,6 +57,14 @@ public class Book {
 
     public void setGenre(String genre) {
         this.genre = genre;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     public double getPrice() {

@@ -90,6 +90,7 @@ public class BooksController {
         book.setGenre(bookDto.getGenre());
         book.setDescription(bookDto.getDescription());
         book.setPrice(bookDto.getPrice());
+        book.setQuantity(bookDto.getQuantity());
         book.setCreatedAt(createAt);
         book.setImageFileName(storageFileName);
 
@@ -115,6 +116,7 @@ public class BooksController {
             BookDto bookDto = new BookDto();
             bookDto.setTitle(book.getTitle());
             bookDto.setGenre(book.getGenre());
+            bookDto.setQuantity(book.getQuantity());
             bookDto.setPrice(book.getPrice());
             bookDto.setDescription(book.getDescription());
             bookDto.setAuthorId(book.getAuthor().getAuthorid()); // Pass the author ID to the DTO
@@ -148,6 +150,7 @@ public class BooksController {
             // Update the book details
             book.setTitle(bookDto.getTitle());
             book.setGenre(bookDto.getGenre());
+            book.setQuantity(bookDto.getQuantity());
             book.setPrice(bookDto.getPrice());
             book.setDescription(bookDto.getDescription());
 

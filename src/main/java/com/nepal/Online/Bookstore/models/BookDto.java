@@ -1,7 +1,5 @@
 package com.nepal.Online.Bookstore.models;
 
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -9,14 +7,17 @@ import jakarta.validation.constraints.Size;
 import org.springframework.web.multipart.MultipartFile;
 
 public class BookDto {
-    @NotEmpty (message = "The book title is required")
+    @NotEmpty(message = "The book title is required")
     private String title;
 
     @NotNull(message = "The author is required")
     private Integer authorId;
 
-    @NotEmpty (message = "The genre is required")
+    @NotEmpty(message = "The genre is required")
     private String genre;
+
+    @Min(value = 0, message = "The quantity should not be less than zero")
+    private int quantity;
 
     @Min(0)
     private double price;
@@ -24,6 +25,7 @@ public class BookDto {
     @Size(min = 10, message = "The description should be at least 10 characters")
     @Size(max = 2000, message = "The description should not exceed 2000 characters")
     private String description;
+
     private MultipartFile imageFile;
 
     public String getTitle() {
@@ -48,6 +50,14 @@ public class BookDto {
 
     public void setGenre(String genre) {
         this.genre = genre;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     public double getPrice() {

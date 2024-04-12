@@ -83,6 +83,7 @@ public class AuthorsController {
 
         Author author = new Author();
         author.setName(authorDto.getName());
+        author.setDescription(authorDto.getDescription());
         author.setCreatedAt(createAt);
         author.setAuthorImageFileName(storageFileName);
 
@@ -102,6 +103,7 @@ public class AuthorsController {
 
             AuthorDto authorDto = new AuthorDto();
             authorDto.setName(author.getName());
+            authorDto.setDescription(author.getDescription());
 
             model.addAttribute("authorDto", authorDto);
         }
@@ -150,6 +152,7 @@ public class AuthorsController {
                 author.setAuthorImageFileName (storageFileName);
             }
             author.setName(authorDto.getName());
+            author.setDescription(authorDto.getDescription());
 
             repo.save(author);
         }
