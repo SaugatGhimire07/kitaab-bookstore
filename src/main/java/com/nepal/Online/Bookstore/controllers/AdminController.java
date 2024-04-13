@@ -135,6 +135,11 @@ public class AdminController {
         return "findus";
     }
 
+    @GetMapping("/greatcountry")
+    public String showGreatCountryPage() {
+        return "great";
+    }
+
 
 
 }

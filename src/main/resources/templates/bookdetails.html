@@ -218,6 +218,8 @@
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
                 </select>
                 <button class="add">Add to Cart</button>
             </div>
@@ -251,35 +253,36 @@
     <script>
         feather.replace();
         $(document).ready(function () {
-            $('.add').click(function () {
-                // Retrieve book details
-                var title = $(this).closest('.book-details').find('.title .font-style').first().text();
-                var image = $(this).closest('#book').find('img').attr('src');
-                var author = $(this).closest('.book-details').find('.title span').last().text();
-                var quantity = $(this).closest('.book-details').find('.nums').val();
-                var price = parseFloat($(this).closest('.book-details').find('.price').text().replace('$', ''));
+        $('.add').click(function () {
+            // Retrieve book details
+            var title = $(this).closest('.book-details').find('.title .font-style').first().text();
+            var image = $(this).closest('#book').find('img').attr('src');
+            var author = $(this).closest('.book-details').find('.title span').last().text();
+            var quantity = parseInt($(this).closest('.book-details').find('.nums').val());
+            var price = parseFloat($(this).closest('.book-details').find('.price').text().replace('$', ''));
 
-                // Create cart item object
-                var cartItem = {
-                    title: title,
-                    image: image,
-                    author: author,
-                    quantity: quantity,
-                    price: price
-                };
+            // Create cart item object
+            var cartItem = {
+                title: title,
+                image: image,
+                author: author,
+                quantity: quantity,
+                price: price
+            };
 
-                // Retrieve existing cart items from local storage or create an empty array
-                var cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+            // Retrieve existing cart items from local storage or create an empty array
+            var cartItems = JSON.parse(localStorage.getItem('cart')) || [];
 
-                // Add new item to cart
-                cartItems.push(cartItem);
+            // Add new item to cart
+            cartItems.push(cartItem);
 
-                // Store updated cart items in local storage
-                localStorage.setItem('cart', JSON.stringify(cartItems));
+            // Store updated cart items in local storage
+            localStorage.setItem('cart', JSON.stringify(cartItems));
 
-                window.location.href = "/cart";
-            });
+            // Redirect user to cart page
+            window.location.href = "/cart";
         });
+    });
 
     </script>
 

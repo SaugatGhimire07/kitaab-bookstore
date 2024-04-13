@@ -200,91 +200,50 @@
 
 <body>
 
-    <div th:replace="components/nav :: div"></div>
+<div th:replace="components/nav :: div"></div>
 
 
-    <main>
-        <div id="book" data-book-id="${book.id}">
-            <img th:src="@{'/images/' + ${book.imageFileName}}" alt="Book Image" style="height: 378px; width: 240px;" />
-            <div class="book-details">
-                <p class="logo-book">Bookshelf</p>
-                <p class="title">
-                    <span th:text="${book.title}" class="font-style"></span>
-                    Hardcover by
-                    <span th:text="${book.author.name}" class="font-style"></span>
-                </p>
-                <p class="price" th:text="'$' + ${book.price}"></p>
-                <select class="nums">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select>
-                <button class="add">Add to Cart</button>
-            </div>
+<main>
+    <div id="book">
+        <img src="images/Great.png" alt="Book Image" style="height: 378px; width: 240px;" />
+        <div class="book-details">
+            <p class="logo-book">Bookshelf</p>
+            <p class="title">
+                <span class="font-style">A Great Country: A Novel</span>
+                Hardcover by
+                <span class="font-style">Shilpi Somaya Gowda</span>
+            </p>
+            <p class="price">$31.45</p>
+            <select class="nums">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+            <button class="add">Pre-Order Now</button>
         </div>
-        <div class="desc">
-            <p th:utext="${book.description}"></p>
-            <h2>ABOUT THE AUTHOR</h2>
-            <p th:utext="${book.author.description}"></p>
-            <h2>YOU MAY ALSO LIKE</h2>
-        </div>
-
-        <div class="books-display">
-            <div class="display-books">
-                <div class="display-book" th:each="book, iterStat : ${booksByAuthor}">
-                    <a th:href="@{/bookdetails(id=${book.bookid})}" class="book-link">
-                        <img th:src="@{'/images/' + ${book.imageFileName}}" alt="..." />
-                    </a>
-                    <a th:href="@{/bookdetails(id=${book.bookid})}" class="book-link">
-                        <p class="book-title" th:text="${book.title}"></p>
-                    </a>
-                    <p class="book-author">by <span th:text="${book.author.name}"></span></p>
-                    <p class="book-price">- $ <span th:text="${book.price}"></span></p>
-                </div>
-            </div>
-        </div>
-    </main>
+    </div>
+    <div class="desc">
+        <p>Pacific Hills, California: Gated communities, ocean views, well-tended lawns, serene pools, and now the new home of the Shah family. For the Shah parents, who came to America twenty years earlier with little more than an education and their new marriage, this move represents the culmination of years of hard work and dreaming. For their children, born and raised in America, success is not so simple.
+            <br>
+            <br>
+            For the most part, these differences among the five members of the Shah family are minor irritants, arguments between parents and children, older and younger siblings. But one Saturday night, the twelve-year-old son is arrested. The fallout from that event will shake each family member's perception of themselves as individuals, as community members, as Americans, and will lead each to consider: how do we define success? At what cost comes ambition? And what is our role and responsibility in the cultural mosaic of modern America?
+            <br>
+            <br>
+            For readers of The Vanishing Half by Brit Bennett and Such a Fun Age by Kiley Reid, A Great Country explores themes of immigration, generational conflict, social class and privilege as it reconsiders the myth of the model minority and questions the price of the American dream.
+        </p>
+        <h2>ABOUT THE AUTHOR</h2>
+        <p>Shilpi Somaya Gowda is the New York Times bestselling, award-winning author of 4 novels: Secret Daughter (2010), The Golden Son (2015), The Shape of Family (2020), and A Great Country (March 26, 2024). Her novels have been translated into over 30 languages, been #1 international bestsellers in several countries and sold more than two million copies worldwide. </p>
+    </div>
+</main>
 
 
-    <div th:replace="components/footer :: footer"></div>
+<div th:replace="components/footer :: footer"></div>
 
-    <script>
-        feather.replace();
-        $(document).ready(function () {
-        $('.add').click(function () {
-            // Retrieve book details
-            var title = $(this).closest('.book-details').find('.title .font-style').first().text();
-            var image = $(this).closest('#book').find('img').attr('src');
-            var author = $(this).closest('.book-details').find('.title span').last().text();
-            var quantity = parseInt($(this).closest('.book-details').find('.nums').val());
-            var price = parseFloat($(this).closest('.book-details').find('.price').text().replace('$', ''));
-
-            // Create cart item object
-            var cartItem = {
-                title: title,
-                image: image,
-                author: author,
-                quantity: quantity,
-                price: price
-            };
-
-            // Retrieve existing cart items from local storage or create an empty array
-            var cartItems = JSON.parse(localStorage.getItem('cart')) || [];
-
-            // Add new item to cart
-            cartItems.push(cartItem);
-
-            // Store updated cart items in local storage
-            localStorage.setItem('cart', JSON.stringify(cartItems));
-
-            // Redirect user to cart page
-            window.location.href = "/cart";
-        });
-    });
-
-    </script>
+<script>
+    feather.replace()
+</script>
 
 </body>
 

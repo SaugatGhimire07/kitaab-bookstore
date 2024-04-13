@@ -64,11 +64,31 @@
             padding: 10px;
         }
 
-        #nav-search p {
+        #nav-search input {
             margin-left: 10px;
-            font-size: 0.9em;
+            font-size: 14px;
             font-weight: regular;
+            background-color: #F4F5F5;
+            border: none;
+            height: 100%;
+            width: 100%;
+        }
+
+        #nav-search input::placeholder {
+            font-size: 14px;
             color: #7E7E7E;
+        }
+
+        #nav-search input:active {
+            border: none;
+            outline: none !important;
+            box-shadow: none;
+        }
+
+        #nav-search input:focus {
+            border: none;
+            outline: none !important;
+            box-shadow: none;
         }
 
         #nav-bar-icons {
@@ -211,6 +231,123 @@
             text-align: left;
             padding-top: 5px;
         }
+
+        footer {
+            margin-top: 50px;
+            background-color: #F4F5F5;
+        }
+
+        .footer-container {
+            width: 80%;
+            margin: auto;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            display: flex;
+            flex-direction: row;
+        }
+
+        .quick-links {
+            width: 50%;
+            margin: auto;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+
+        .email-listing {
+            width: 50%;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            padding-left: 10%;
+        }
+
+        .first-column {
+
+            display: flex;
+            flex-direction: column;
+        }
+
+        footer ul {
+            list-style: none;
+        }
+
+        footer ul li a {
+            color: black;
+            text-decoration: none;
+        }
+
+        footer ul li {
+            font-family: Inter;
+            font-size: 14px;
+            line-height: 16.94px;
+            letter-spacing: 0.05em;
+            text-align: left;
+            padding-top: 20px;
+        }
+
+        footer .first-column ul li {
+            font-weight: 700;
+        }
+
+        .column-header {
+            font-weight: 700;
+        }
+
+        #join-heading {
+            font-family: Inria Serif;
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 38.37px;
+            letter-spacing: 0.05em;
+            text-align: left;
+            padding-bottom: 20px;
+        }
+
+        #join-description {
+            font-family: Inter;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 21px;
+            letter-spacing: 0.03em;
+            text-align: left;
+            padding-bottom: 20px;
+        }
+
+        .email-listing-form {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .email-listing-form input {
+            width: 80%;
+            padding: 10px;
+            border: none;
+            border-radius: 1px;
+        }
+
+        .email-listing-form button {
+            width: 18%;
+            background-color: black;
+            color: white;
+            border: none;
+            border-radius: 1px;
+            margin-left: 10px;
+        }
+
+        #copy-right {
+
+            padding-top: 20px;
+            font-family: Inter;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 21px;
+            letter-spacing: 0.03em;
+            padding-left: 10%;
     </style>
 </head>
 
@@ -234,13 +371,10 @@
                     <p class="book-price">- $ <span th:text="${book.price}"></span></p>
                 </div>
             </div>
-
         </div>
     </main>
 
-    <footer>
-
-    </footer>
+    <div th:replace="components/footer :: footer"></div>
 
     <script>
         feather.replace();

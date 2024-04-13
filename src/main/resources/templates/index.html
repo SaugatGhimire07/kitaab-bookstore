@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kitabkhana</title>
     <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <link rel="stylesheet" type="text/css" href="styles.css">
     <link rel="stylesheet" type="text/css" href="nav.css">
@@ -84,7 +85,7 @@
                     privilege, and the immigrant experience ...<br>
                     I devoured this book over one weekend.”
                 </p>
-                <button class="button">Pre-Order Now</button>
+                <a href="/greatcountry" class="button">Pre-Order Now</a>
             </div>
         </div>
 
@@ -133,6 +134,72 @@
 
     <script>
         feather.replace();
+
+        $(document).ready(function () {
+            const books = [
+                {
+                    title: "The Alchemist",
+                    author: "Paulo Coelho",
+                    image: "images/FeaturedBook1.jpg"
+                },
+                {
+                    title: "Ulysses",
+                    author: "James Joyce",
+                    image: "images/FeaturedBook2.jpg"
+                },
+                {
+                    title: "In Search of Lost Time",
+                    author: "Marcel Proust",
+                    image: "images/FeaturedBook3.jpg"
+                },
+                {
+                    title: "Trilogy",
+                    author: "Jon Fosse",
+                    image: "images/Book1.png"
+                },
+                {
+                    title: "A Thousand Splendid Suns",
+                    author: "Khaled Hosseini",
+                    image: "images/Book2.png"
+                },
+                {
+                    title: "Ikigai",
+                    author: "Francesc Miralles and Hector Garcia",
+                    image: "images/Book3.png"
+                },
+                {
+                    title: "The Girl on the Train",
+                    author: "Paula Hawkins",
+                    image: "images/Book4.jpg"
+                },
+                {
+                    title: "A Great Country",
+                    author: "Shilpi Somaya Gowda",
+                    image: "images/Book5.png"
+                },
+            ];
+
+            let currentBookIndex = 0;
+
+            function updateFeaturedBooks() {
+                const $featuredBooksContainer = $('#featured-books');
+                $featuredBooksContainer.empty();
+
+                for (let i = 0; i < 3; i++) {
+                    const book = books[currentBookIndex];
+                    const $featuredBook = $('<div class="featured-book"></div>');
+                    const $image = $('<img>').attr('src', book.image).attr('alt', book.title);
+                    const $details = $('<div class="details"></div>').append(`<p class="book-title">${book.title}</p><p class="book-author">${book.author}</p>`);
+                    $featuredBook.append($image).append($details);
+                    $featuredBooksContainer.append($featuredBook);
+                    currentBookIndex = (currentBookIndex + 1) % books.length;
+                }
+            }
+
+            updateFeaturedBooks();
+            setInterval(updateFeaturedBooks, 8000);
+        });
+
     </script>
 </body>
 

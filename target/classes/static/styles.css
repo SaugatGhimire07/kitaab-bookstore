@@ -355,3 +355,36 @@
 .display-subtitle {
     font-family: Inria Serif;
 }
+
+/* Slide up animation */
+        @keyframes slideUp {
+            0% {
+                transform: translateY(20%);
+            }
+
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        /* Fade in animation */
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* Apply animations to the featured book elements inside featured-container */
+        #featured-container .featured-book img {
+            animation: slideUp 1s ease;
+            backface-visibility: hidden;
+        }
+
+        #featured-container .featured-book .details {
+            animation: fadeIn 2s ease;
+            backface-visibility: hidden;
+        }

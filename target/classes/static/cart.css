@@ -240,6 +240,7 @@ input[type=number] {
 
 .remove-button button:hover {
     background-color: #F4F5F5;
+    cursor: pointer;
 }
 
 .remove-icon {
@@ -255,6 +256,7 @@ footer {
 }
 
 .buttons {
+    width: 90%;
     display: flex;
     flex-direction: row;
     justify-content: right;
@@ -272,25 +274,22 @@ footer {
 }
 
 .continue-button {
+    cursor: pointer;
     background-color: white;
     color: black;
     border: black 1px solid;
     border-radius: 1px;
-}
-
-.continue-button:hover {
-    background-color: black;
-    color: white;
 }
 
 .proceed-button {
+    cursor: pointer;
     background-color: black;
     color: white;
     border: black 1px solid;
     border-radius: 1px;
 }
 
-.proceed-button:hover {
-    background-color: white;
-    color: black;
+.total-amount{
+float: right;
+padding-right: 11%;
 }

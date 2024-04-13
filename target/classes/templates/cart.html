@@ -26,7 +26,7 @@
                     <th>Total</th>
                 </tr>
             </table>
-
+            <div class="total-amount">Grand Total: <span class="grand-total">$0.00</span></div>
             <div class="buttons">
                 <button class="continue-button">Continue Shopping</button>
                 <button class="proceed-button">Proceed to Checkout</button>
@@ -38,60 +38,90 @@
 
     <div th:replace="components/footer :: footer"></div>
 
-    <script>
-        // Initialize Feather Icons after the document is loaded
-        document.addEventListener("DOMContentLoaded", function () {
-            feather.replace();
+<script>
+    // Initialize Feather Icons after the document is loaded
+    document.addEventListener("DOMContentLoaded", function () {
+        feather.replace();
+    });
+
+    $(document).ready(function () {
+        // Retrieve cart items from local storage
+        var cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+
+        // Display cart items
+        cartItems.forEach(function (item, index) {
+            var row = '<tr>' +
+                '<td><img src="' + item.image + '" alt=""></td>' +
+                '<td>' +
+                '<div class="table-details">' +
+                '<p>' + item.title + ' Hardcover<br>by ' + item.author + '</p>' +
+                '<div class="remove-button">' +
+                '<button onclick="removeItem(' + index + ')">' + // Pass index to removeItem function
+                '<i data-feather="trash-2" class="remove-icon"></i> <span class="remove-text">Remove</span>' +
+                '</button>' +
+                '</div>' +
+                '</div>' +
+                '</td>' +
+                '<td>' +
+                '<select class="nums" onchange="updatePrice(' + index + ', this.value)">' + // Pass index and this.value to updatePrice function
+                '<option value="1" ' + (item.quantity === 1 ? 'selected' : '') + '>1</option>' +
+                '<option value="2" ' + (item.quantity === 2 ? 'selected' : '') + '>2</option>' +
+                '<option value="3" ' + (item.quantity === 3 ? 'selected' : '') + '>3</option>' +
+                '<option value="4" ' + (item.quantity === 4 ? 'selected' : '') + '>4</option>' +
+                '<option value="5" ' + (item.quantity === 5 ? 'selected' : '') + '>5</option>' +
+                '</select>' +
+                '</td>' +
+                '<td class="table-row-total">' + (item.quantity * item.price).toFixed(2) + '</td>' +
+                '</tr>';
+
+            $('table tbody').append(row);
         });
 
-        $(document).ready(function () {
-            // Retrieve cart items from local storage
-            var cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+        // Calculate and display Grand Total
+        var grandTotal = cartItems.reduce(function (total, item) {
+            return total + (item.quantity * item.price);
+        }, 0);
+        $('.grand-total').text('$' + grandTotal.toFixed(2));
+    });
 
-            // Display cart items
-            cartItems.forEach(function (item, index) {
-                var row = '<tr>' +
-                    '<td><img src="' + item.image + '" alt=""></td>' +
-                    '<td>' +
-                    '<div class="table-details">' +
-                    '<p>' + item.title + ' Hardcover<br>by ' + item.author + '</p>' +
-                    '<div class="remove-button">' +
-                    '<button onclick="removeItem(' + index + ')">' + // Pass index to removeItem function
-                    '<i data-feather="trash-2" class="remove-icon"></i> <span class="remove-text">Remove</span>' +
-                    '</button>' +
-                    '</div>' +
-                    '</div>' +
-                    '</td>' +
-                    '<td>' +
-                    '<select class="nums">' +
-                    '<option value="1" ' + (item.quantity === 1 ? 'selected' : '') + '>1</option>' +
-                    '<option value="2" ' + (item.quantity === 2 ? 'selected' : '') + '>2</option>' +
-                    '<option value="3" ' + (item.quantity === 3 ? 'selected' : '') + '>3</option>' +
-                    '</select>' +
-                    '</td>' +
-                    '<td class="table-row-total">' + (item.quantity * item.price).toFixed(2) + '</td>' +
-                    '</tr>';
+    function removeItem(index) {
+        // Retrieve cart items from local storage
+        var cartItems = JSON.parse(localStorage.getItem('cart')) || [];
 
-                $('table tbody').append(row);
-            });
-        });
+        // Remove item from cart based on the index
+        cartItems.splice(index, 1);
 
-        function removeItem(index) {
-            // Retrieve cart items from local storage
-            var cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+        // Update local storage with modified cart items
+        localStorage.setItem('cart', JSON.stringify(cartItems));
 
-            // Remove item from cart using the index
-            cartItems.splice(index, 1);
+        // Reload the page
+        location.reload();
+    }
 
-            // Update local storage with modified cart items
-            localStorage.setItem('cart', JSON.stringify(cartItems));
+    function updatePrice(index, quantity) {
+        // Retrieve cart items from local storage
+        var cartItems = JSON.parse(localStorage.getItem('cart')) || [];
 
-            // Reload the page
-            location.reload();
-        }
-    </script>
+        // Update quantity of the item
+        cartItems[index].quantity = parseInt(quantity);
 
+        // Update local storage with modified cart items
+        localStorage.setItem('cart', JSON.stringify(cartItems));
 
+        // Update total price for the item
+        var totalPrice = cartItems[index].quantity * cartItems[index].price;
+        $('table tbody tr:eq(' + index + ') .table-row-total').text('$' + totalPrice.toFixed(2));
+
+        // Calculate and update Grand Total
+        var grandTotal = cartItems.reduce(function (total, item) {
+            return total + (item.quantity * item.price);
+        }, 0);
+        $('.grand-total').text('$' + grandTotal.toFixed(2));
+
+        // Reload the page
+        location.reload();
+    }
+</script>
 
 
 </body>
