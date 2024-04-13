@@ -25,9 +25,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Controller class for managing books in the bookstore.
- */
 @Controller
 @RequestMapping("/books")
 public class BooksController {
@@ -38,10 +35,10 @@ public class BooksController {
     private AuthorsRepository authorRepo;
 
     /**
-     * Retrieves the list of books and displays them.
+     * Retrieves and displays the list of books.
      *
-     * @param model the model object to add attributes to
-     * @return the view name for displaying the book list
+     * @param model the model object to add the list of books
+     * @return the view name for displaying the list of books
      */
     @GetMapping("")
     public String showBookList(Model model) {
@@ -53,7 +50,7 @@ public class BooksController {
     /**
      * Displays the create book form.
      *
-     * @param model the model object to add attributes to
+     * @param model the model object to add the book DTO and the list of authors
      * @return the view name for displaying the create book form
      */
     @GetMapping("/add")
@@ -67,18 +64,60 @@ public class BooksController {
     /**
      * Creates a new book.
      *
-     * @param bookDto the book data transfer object
-     * @param result  the binding result for validation errors
-     * @param model   the model object to add attributes to
-     * @return the view name for redirecting to the book list
+     * @param bookDto the book DTO containing the book details
+     * @param result  the binding result object for validation errors
+     * @param model   the model object to add the list of authors
+     * @return the view name for redirecting to the book list page
      */
     @PostMapping("/add")
     public String createBook(
             @Valid @ModelAttribute BookDto bookDto,
             BindingResult result,
             Model model) {
-        // Code for creating a book
-        // ...
+        // Validation for image file
+        if (bookDto.getImageFile().isEmpty()) {
+            result.addError(new FieldError("bookDto", "imageFile", "The image file is required."));
+        }
+
+        if (result.hasErrors()) {
+            model.addAttribute("authors", authorRepo.findAll());
+            return "books/CreateBook";
+        }
+
+        // Save image file
+        MultipartFile imageFile = bookDto.getImageFile();
+        Date createAt = new Date();
+        String storageFileName = createAt.getTime() + "_" + imageFile.getOriginalFilename();
+
+        try {
+            String uploadDir = "public/images/";
+            Path uploadPath = Paths.get(uploadDir);
+
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+            try (InputStream inputStream = imageFile.getInputStream()) {
+                Files.copy(inputStream, Paths.get(uploadDir + storageFileName), StandardCopyOption.REPLACE_EXISTING);
+            }
+        } catch (Exception ex) {
+            System.out.println("Exception: " + ex.getMessage());
+        }
+
+        Book book = new Book();
+        book.setTitle(bookDto.getTitle());
+        book.setGenre(bookDto.getGenre());
+        book.setDescription(bookDto.getDescription());
+        book.setPrice(bookDto.getPrice());
+        book.setQuantity(bookDto.getQuantity());
+        book.setCreatedAt(createAt);
+        book.setImageFileName(storageFileName);
+
+        Optional<Author> authorOptional = authorRepo.findById(bookDto.getAuthorId());
+        Author author = authorOptional.get();
+        book.setAuthor(author);
+        System.out.print(book.getAuthor());
+
+        repo.save(book);
 
         return "redirect:/books";
     }
@@ -86,7 +125,8 @@ public class BooksController {
     /**
      * Displays the edit book form.
      *
-     * @param model the model object to add attributes to
+     * @param model the model object to add the book, book DTO, and the list of
+     *              authors
      * @param id    the ID of the book to edit
      * @return the view name for displaying the edit book form
      */
@@ -94,28 +134,92 @@ public class BooksController {
     public String showBookEditPage(
             Model model,
             @RequestParam int id) {
-        // Code for displaying the edit book form
-        // ...
+        try {
+            Book book = repo.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid book id: " + id));
+            model.addAttribute("book", book);
 
+            BookDto bookDto = new BookDto();
+            bookDto.setTitle(book.getTitle());
+            bookDto.setGenre(book.getGenre());
+            bookDto.setQuantity(book.getQuantity());
+            bookDto.setPrice(book.getPrice());
+            bookDto.setDescription(book.getDescription());
+            bookDto.setAuthorId(book.getAuthor().getAuthorid()); // Pass the author ID to the DTO
+
+            model.addAttribute("bookDto", bookDto);
+
+            // Retrieve the list of authors and add it to the model
+            List<Author> authors = authorRepo.findAll();
+            model.addAttribute("authors", authors);
+        } catch (Exception ex) {
+            System.out.println("Exception: " + ex.getMessage());
+            return "redirect:/books";
+        }
         return "books/EditBook";
     }
 
     /**
-     * Updates an existing book.
+     * Updates the book details.
      *
      * @param id      the ID of the book to update
-     * @param bookDto the book data transfer object
-     * @param result  the binding result for validation errors
-     * @return the view name for redirecting to the book list
+     * @param bookDto the book DTO containing the updated book details
+     * @param result  the binding result object for validation errors
+     * @return the view name for redirecting to the book list page
      */
     @PostMapping("/edit")
     public String updateBook(
             @RequestParam int id,
             @Valid @ModelAttribute BookDto bookDto,
             BindingResult result) {
-        // Code for updating the book
-        // ...
+        try {
+            if (result.hasErrors()) {
+                return "books/EditBook";
+            }
 
+            Book book = repo.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid book id: " + id));
+
+            // Update the book details
+            book.setTitle(bookDto.getTitle());
+            book.setGenre(bookDto.getGenre());
+            book.setQuantity(bookDto.getQuantity());
+            book.setPrice(bookDto.getPrice());
+            book.setDescription(bookDto.getDescription());
+
+            // Update the author of the book
+            Optional<Author> authorOptional = authorRepo.findById(bookDto.getAuthorId());
+            Author author = authorOptional
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid author id: " + bookDto.getAuthorId()));
+            book.setAuthor(author);
+
+            if (!bookDto.getImageFile().isEmpty()) {
+                // Delete old image
+                String uploadDir = "public/images/";
+                Path oldImagePath = Paths.get(uploadDir + book.getImageFileName());
+                try {
+                    Files.delete(oldImagePath);
+                } catch (Exception ex) {
+                    System.out.println(ex.getMessage());
+                }
+
+                // Save new image file
+                MultipartFile image = bookDto.getImageFile();
+                Date createdAt = new Date();
+                String storageFileName = createdAt.getTime() + "_" + image.getOriginalFilename();
+
+                try (InputStream inputStream = image.getInputStream()) {
+                    Files.copy(inputStream, Paths.get(uploadDir + storageFileName),
+                            StandardCopyOption.REPLACE_EXISTING);
+                } catch (Exception ex) {
+                    System.out.println(ex.getMessage());
+                }
+
+                book.setImageFileName(storageFileName);
+            }
+
+            repo.save(book);
+        } catch (Exception ex) {
+            System.out.println("Exception: " + ex.getMessage());
+        }
         return "redirect:/books";
     }
 
@@ -123,14 +227,25 @@ public class BooksController {
      * Deletes a book.
      *
      * @param id the ID of the book to delete
-     * @return the view name for redirecting to the book list
+     * @return the view name for redirecting to the book list page
      */
     @GetMapping("/delete")
     public String deleteBook(
             @RequestParam int id) {
-        // Code for deleting the book
-        // ...
+        try {
+            Book book = repo.findById(id).get();
+            Path imagePath = Paths.get("products/images/" + book.getImageFileName());
 
+            try {
+                Files.delete(imagePath);
+            } catch (Exception ex) {
+                System.out.println("Exception: " + ex.getMessage());
+            }
+
+            repo.delete(book);
+        } catch (Exception ex) {
+            System.out.println("Exception: " + ex.getMessage());
+        }
         return "redirect:/books";
     }
 }
