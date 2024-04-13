@@ -1,6 +1,5 @@
 package com.nepal.Online.Bookstore.controllers;
 
-
 import com.nepal.Online.Bookstore.models.Author;
 import com.nepal.Online.Bookstore.models.AuthorDto;
 import com.nepal.Online.Bookstore.models.Book;
@@ -25,14 +24,25 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * Controller for handling operations related to authors.
+ */
 @Controller
 @RequestMapping("/authors")
 public class AuthorsController {
+
     @Autowired
     private AuthorsRepository repo;
+
     @Autowired
     private BooksRepository booksRepository;
 
+    /**
+     * Displays a list of authors.
+     *
+     * @param model Model object for passing data to the view.
+     * @return The view name for displaying the list of authors.
+     */
     @GetMapping("")
     public String showAuthorList(Model model) {
         List<Author> authors = repo.findAll();
@@ -40,6 +50,12 @@ public class AuthorsController {
         return "authors/author";
     }
 
+    /**
+     * Displays the page for creating a new author.
+     *
+     * @param model Model object for passing data to the view.
+     * @return The view name for creating a new author.
+     */
     @GetMapping("/add")
     public String showCreateAuthPage(Model model) {
         AuthorDto authorDto = new AuthorDto();
@@ -47,13 +63,19 @@ public class AuthorsController {
         return "authors/CreateAuthor";
     }
 
+    /**
+     * Handles the creation of a new author.
+     *
+     * @param authorDto The DTO containing author information.
+     * @param result    BindingResult object for validation result.
+     * @return The redirection URL after creating the author.
+     */
     @PostMapping("/add")
     public String createAuthor(
             @Valid @ModelAttribute AuthorDto authorDto,
-            BindingResult result
-    ) {
+            BindingResult result) {
 
-        if(authorDto.getAuthorImageFile().isEmpty()) {
+        if (authorDto.getAuthorImageFile().isEmpty()) {
             result.addError(new FieldError("authorDto", "authorImageFile", "The image file is required."));
         }
 
@@ -61,12 +83,12 @@ public class AuthorsController {
             return "authors/CreateAuthor";
         }
 
-        //save image file
+        // save image file
         MultipartFile authorImage = authorDto.getAuthorImageFile();
         Date createAt = new Date();
         String storageFileName = createAt.getTime() + "_" + authorImage.getOriginalFilename();
 
-        try{
+        try {
             String uploadDir = "public/images/";
             Path uploadPath = Paths.get(uploadDir);
 
@@ -76,9 +98,8 @@ public class AuthorsController {
             try (InputStream inputStream = authorImage.getInputStream()) {
                 Files.copy(inputStream, Paths.get(uploadDir + storageFileName), StandardCopyOption.REPLACE_EXISTING);
             }
-        }
-        catch (Exception ex) {
-            System.out.println("Execption: " + ex.getMessage());
+        } catch (Exception ex) {
+            System.out.println("Exception: " + ex.getMessage());
         }
 
         Author author = new Author();
@@ -92,12 +113,18 @@ public class AuthorsController {
         return "redirect:/authors";
     }
 
+    /**
+     * Displays the page for editing an author.
+     *
+     * @param model Model object for passing data to the view.
+     * @param id    The ID of the author to be edited.
+     * @return The view name for editing an author.
+     */
     @GetMapping("/edit")
     public String showAuthEditPage(
             Model model,
-            @RequestParam int id
-    ){
-        try{
+            @RequestParam int id) {
+        try {
             Author author = repo.findById(id).get();
             model.addAttribute("author", author);
 
@@ -106,38 +133,44 @@ public class AuthorsController {
             authorDto.setDescription(author.getDescription());
 
             model.addAttribute("authorDto", authorDto);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             System.out.println("Exception: " + ex.getMessage());
             return "redirect:/authors";
         }
         return "authors/EditAuthor";
     }
 
-    @PostMapping ("/edit")
+    /**
+     * Handles updating an author's information.
+     *
+     * @param model     Model object for passing data to the view.
+     * @param id        The ID of the author to be updated.
+     * @param authorDto The DTO containing updated author information.
+     * @param result    BindingResult object for validation result.
+     * @return The redirection URL after updating the author.
+     */
+    @PostMapping("/edit")
     public String updateAuthor(
             Model model,
             @RequestParam int id,
             @Valid @ModelAttribute AuthorDto authorDto,
-            BindingResult result
-    ) {
-        try{
+            BindingResult result) {
+        try {
             Author author = repo.findById(id).get();
             model.addAttribute("author", author);
 
-            if (result.hasErrors()){
+            if (result.hasErrors()) {
                 return "authors/EditAuthor";
             }
 
             if (!authorDto.getAuthorImageFile().isEmpty()) {
-            // delete old image
+                // delete old image
                 String uploadDir = "public/images/";
                 Path oldImagePath = Paths.get(uploadDir + author.getAuthorImageFileName());
                 try {
                     Files.delete(oldImagePath);
-                }
-                catch (Exception ex) {
-                    System.out.println("Exception: " +ex.getMessage());
+                } catch (Exception ex) {
+                    System.out.println("Exception: " + ex.getMessage());
                 }
 
                 // save new image file
@@ -146,48 +179,54 @@ public class AuthorsController {
                 String storageFileName = createdAt.getTime() + "_" + image.getOriginalFilename();
 
                 try (InputStream inputStream = image.getInputStream()) {
-                    Files.copy (inputStream, Paths.get(uploadDir + storageFileName), StandardCopyOption.REPLACE_EXISTING);
+                    Files.copy(inputStream, Paths.get(uploadDir + storageFileName),
+                            StandardCopyOption.REPLACE_EXISTING);
                 }
 
-                author.setAuthorImageFileName (storageFileName);
+                author.setAuthorImageFileName(storageFileName);
             }
             author.setName(authorDto.getName());
             author.setDescription(authorDto.getDescription());
 
             repo.save(author);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             System.out.println("Exception: " + ex.getMessage());
         }
         return "redirect:/authors";
     }
 
-    @GetMapping ("/delete")
+    /**
+     * Deletes an author and associated data.
+     *
+     * @param id                 The ID of the author to be deleted.
+     * @param redirectAttributes RedirectAttributes object for passing attributes
+     *                           during redirection.
+     * @return The redirection URL after deleting the author.
+     */
+    @GetMapping("/delete")
     public String deleteAuthor(
             @RequestParam int id,
-            RedirectAttributes redirectAttributes
-    ){
-        try{
+            RedirectAttributes redirectAttributes) {
+        try {
             Author author = repo.findById(id).get();
 
             List<Book> booksByAuthor = booksRepository.findByAuthor(author);
 
             if (!booksByAuthor.isEmpty()) {
-                redirectAttributes.addFlashAttribute("error", "Sorry, Author is referenced by at least one book. Please remove the associated books first, and then try again.");
+                redirectAttributes.addFlashAttribute("error",
+                        "Sorry, Author is referenced by at least one book. Please remove the associated books first, and then try again.");
             }
 
             Path imagePath = Paths.get("products/images/" + author.getAuthorImageFileName());
 
-            try{
+            try {
                 Files.delete(imagePath);
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 System.out.println("Exception: " + ex.getMessage());
             }
 
             repo.delete(author);
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             System.out.println("Exception: " + ex.getMessage());
         }
         return "redirect:/authors";

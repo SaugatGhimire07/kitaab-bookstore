@@ -1,3 +1,6 @@
+/**
+ * This class is a controller for handling requests related to book categories.
+ */
 package com.nepal.Online.Bookstore.controllers;
 
 import com.nepal.Online.Bookstore.models.Book;
@@ -19,6 +22,14 @@ public class CategoriesController {
     @Autowired
     private BooksRepository repo;
 
+    /**
+     * Retrieves all books from the repository and extracts the genres from them.
+     * Adds the genres to the model and returns the template name for the categories
+     * page.
+     *
+     * @param model the model object to add attributes to
+     * @return the template name for the categories page
+     */
     @GetMapping
     public String showCategoriesPage(Model model) {
         // Retrieve all books from the repository
@@ -36,6 +47,15 @@ public class CategoriesController {
         return "categories/category";
     }
 
+    /**
+     * Retrieves books with the specified genre from the repository.
+     * Adds the books and the genre to the model and returns the template name for
+     * displaying the books by genre.
+     *
+     * @param genre the genre of the books to retrieve
+     * @param model the model object to add attributes to
+     * @return the template name for displaying the books by genre
+     */
     @GetMapping("/{genre}")
     public String showBooksByGenre(@PathVariable String genre, Model model) {
         // Retrieve books with the specified genre from the repository
@@ -50,5 +70,3 @@ public class CategoriesController {
         return "categories/booksByGenre";
     }
 }
-
-
