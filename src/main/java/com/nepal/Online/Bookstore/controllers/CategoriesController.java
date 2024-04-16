@@ -47,7 +47,7 @@ public class CategoriesController {
         // Add the genre to the model for display purposes
         model.addAttribute("genre", genre);
 
-        return "categories/booksByGenre";
+        return "categories/genrebooks";
     }
 }
 

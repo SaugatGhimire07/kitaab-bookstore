@@ -289,7 +289,38 @@ footer {
     border-radius: 1px;
 }
 
-.total-amount{
-float: right;
-padding-right: 11%;
+.total-amount {
+    float: right;
+    padding-right: 11%;
+}
+
+@media only screen and (max-width: 700px) {
+
+    table img {
+        max-width: 120px;
+    }
+
+    .table-details p {
+        padding-left: 5px;
+        font-size: 10px;
+
+    }
+
+    .remove-button button {
+        font-size: 0.6em;
+    }
+
+    .quantity input {
+        font-size: 10px;
+    }
+
+    .table-row-total {
+        font-size: 10px;
+
+    }
+
+    .body-container {
+        width: 100%;
+    }
+
 }

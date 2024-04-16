@@ -115,3 +115,24 @@ footer .first-column ul li {
     letter-spacing: 0.03em;
     padding-left: 10%;
 }
+
+@media only screen and (max-width: 700px) {
+    .footer-container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .footer-container .quick-links {
+        width: 100%;
+        align-items: center;
+    }
+
+    .footer-container .third-column {
+        display: none;
+    }
+
+    .email-listing {
+        width: 100%;
+        padding-left: 0;
+    }
+}}
